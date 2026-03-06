@@ -19,8 +19,24 @@ const initialState = {
 export const AppProvider = ({ children }) => {
 const [state, dispatch] = useReducer(reducer, initialState);
 
+const clearCart = () => {
+    dispatch({ type: CLEAR_CART });
+}
+
+const removeProduct = (id) => {
+    dispatch({ type: REMOVE, payload: { id } });
+}
+
+const increaseAmount = (id) => {
+    dispatch({ type: INCREASE, payload: { id } });
+}
+
+const decreaseAmount = (id) => {
+    dispatch({ type: DECREASE, payload: { id } });
+}
+
     return (
-        <AppContext.Provider value={{ ...state, dispatch }}>
+        <AppContext.Provider value={{ ...state, clearCart, removeProduct, increaseAmount, decreaseAmount }}>
             {children}
         </AppContext.Provider>
     );
