@@ -2,6 +2,7 @@ import { useContext, useReducer, useEffect, createContext } from "react";
 const AppContext = createContext();
 import reducer from './reducer';
 import cartItems from './data';
+import { getTotals } from './utils';
 import { 
     CLEAR_CART, 
     REMOVE, 
@@ -17,26 +18,37 @@ const initialState = {
 }
 
 export const AppProvider = ({ children }) => {
-const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { totalAmount, totalPrice } = getTotals(state.cart);
 
-const clearCart = () => {
-    dispatch({ type: CLEAR_CART });
-}
 
-const removeProduct = (id) => {
-    dispatch({ type: REMOVE, payload: { id } });
-}
+    const clearCart = () => {
+        dispatch({ type: CLEAR_CART });
+    }
 
-const increaseAmount = (id) => {
-    dispatch({ type: INCREASE, payload: { id } });
-}
+    const removeProduct = (id) => {
+        dispatch({ type: REMOVE, payload: { id } });
+    }
 
-const decreaseAmount = (id) => {
-    dispatch({ type: DECREASE, payload: { id } });
-}
+    const increaseAmount = (id) => {
+        dispatch({ type: INCREASE, payload: { id } });
+    }
+
+    const decreaseAmount = (id) => {
+        dispatch({ type: DECREASE, payload: { id } });
+    }
 
     return (
-        <AppContext.Provider value={{ ...state, clearCart, removeProduct, increaseAmount, decreaseAmount }}>
+        <AppContext.Provider value={{ 
+            ...state, 
+            clearCart, 
+            removeProduct, 
+            increaseAmount, 
+            decreaseAmount, 
+            getTotals,
+            totalAmount, 
+            totalPrice 
+        }}>
             {children}
         </AppContext.Provider>
     );
